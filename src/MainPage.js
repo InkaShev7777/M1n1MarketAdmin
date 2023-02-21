@@ -3,6 +3,9 @@ import  axios  from "axios";
 import './MainPage.css';
 function MainPage(){
     useEffect(()=>{
+        //
+        //      get all category
+        //  
         axios({
             method: 'get',
             url: 'https://localhost:7031/api/ControllerClass/GetAllCategory',
@@ -28,7 +31,85 @@ function MainPage(){
                 var td2 = document.createElement('td');
                 td2.textContent = iterator['title'];
                 tr.appendChild(td2);
-                tr.addEventListener('click',()=>{
+
+
+                //bitton add product
+                var tdButton = document.createElement('td');
+                var buttonAdd = document.createElement('button');
+                buttonAdd.setAttribute('class','buttonAdd');
+                buttonAdd.textContent = 'Add Product';
+                buttonAdd.addEventListener('click',()=>{
+                    console.log(iterator['id']);
+                    var mainDivAddProduct = document.getElementsByClassName('MainDiv')[0];
+                    var divAddProduct = document.createElement('div');
+                    divAddProduct.id = 'AddProductDiv';
+
+                    var h3 = document.createElement('h3');
+                    h3.textContent = 'Add Product';
+                    var inpTitle = document.createElement('input');
+                    inpTitle.placeholder = 'Title product...';
+                    var inpModel = document.createElement('input');
+                    inpModel.placeholder = 'Model product...';
+                    var inpPrice = document.createElement('input');
+                    inpPrice.type = 'number';
+                    inpPrice.placeholder = 'Price product...';
+                    var inpUri = document.createElement('input');
+                    inpUri.placeholder = 'URL Photo...';
+                    var inpAmount = document.createElement('input');
+                    inpAmount.placeholder = 'Amount...';
+                    inpAmount.type = 'number';
+                    var inpStatus = document.createElement('input');
+                    inpStatus.placeholder = 'Status...';
+                    var buttonConfirmAddProduct = document.createElement('button');
+                    buttonConfirmAddProduct.textContent = 'Confirm';
+                    inpTitle.className = 'inpMargin';
+                    inpModel.className = 'inpMargin';
+                    inpPrice.className = 'inpMargin';
+                    inpUri.className = 'inpMargin';
+                    inpAmount.className = 'inpMargin';
+                    inpStatus.className = 'inpMargin';
+                    buttonConfirmAddProduct.className = 'inpMargin';
+                    buttonConfirmAddProduct.addEventListener('click',()=>{
+                        axios({
+                            method: 'post',
+                            url: `https://localhost:7031/api/ControllerClass/addProduct`,
+                            dataType: "dataType",
+                            data:JSON.stringify({
+                                id:0,
+                                title:inpTitle.value,
+                                model:inpModel.value,
+                                price:inpPrice.value,
+                                idCategory:iterator['id'],
+                                uriPhoto:inpUri.value,
+                                amount:inpAmount.value,
+                                status:inpStatus.value
+                            }),
+                            headers: {
+                                'Accept': '*/*',
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer '+sessionStorage.getItem('token')
+                            }
+                        }).then(resAdd => {
+                            console.log(resAdd);
+                        });
+                        divAddProduct.remove();
+                    });
+
+                    divAddProduct.append(h3);
+                    divAddProduct.append(inpTitle);
+                    divAddProduct.append(inpModel);
+                    divAddProduct.append(inpPrice);
+                    divAddProduct.append(inpUri);
+                    divAddProduct.append(inpAmount);
+                    divAddProduct.append(inpStatus);
+                    divAddProduct.append(buttonConfirmAddProduct);
+                    mainDivAddProduct.append(divAddProduct);
+                });
+                tdButton.appendChild(buttonAdd);
+                tr.appendChild(tdButton);
+
+
+                td2.addEventListener('click',()=>{
                     var mainDivFrstTable = document.getElementsByClassName('MainDiv')[0];
                     mainDivFrstTable.id = 'hidden';
                     secondDivTable.setAttribute('class','');
@@ -39,6 +120,7 @@ function MainPage(){
                         headers: {
                             'Accept': '*/*',
                             'Content-Type': 'application/json'
+                            
                         }
                     }).then(listproduct => {
                         console.log(listproduct);
@@ -78,6 +160,26 @@ function MainPage(){
                             tdUpdate.id = iter['id'];
                             var tdDelete = document.createElement('td');
                             var imgDelete = document.createElement('img');
+                            //
+                            //      delete product
+                            //
+                            imgDelete.addEventListener('click',()=>{
+                               
+                                axios({
+                                    method: 'post',
+                                    url: `https://localhost:7031/api/ControllerClass/deleteProduct?id=${iter['id']}`,
+                                    dataType: "dataType",
+                                    headers: {
+                                        'Accept': '*/*',
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer '+sessionStorage.getItem('token')
+                                    }
+                                }).then(deleteOK => {
+                                    console.log(deleteOK);
+                                    window.location.reload();
+                                });
+
+                            });
                             imgDelete.src = './delete-bg.png';
                             imgDelete.width = 50;
                             tdDelete.appendChild(imgDelete);
@@ -86,26 +188,6 @@ function MainPage(){
                             tdIdCategory.className = 'iterClass';
 
                             //clicks
-
-                            
-
-                            // tdUpdate.addEventListener('click',()=>{
-                            //     var listClick = document.getElementsByClassName('iterClass');
-                            //     console.log(tdUpdate.parentNode);
-
-                            //     tdImg.setAttribute('contentEditable','true');
-                            //     tdAmount.setAttribute('contentEditable','true');
-                            //     tdIdCategory.setAttribute('contentEditable','true');
-                            //     tdModel.setAttribute('contentEditable','true');
-                            //     tdName.setAttribute('contentEditable','true');
-                            //     tdPrice.setAttribute('contentEditable','true');
-                            //     tdSold.setAttribute('contentEditable','true');
-                            //     tdStatus.setAttribute('contentEditable','true');
-                            //     var buttonSave = document.createElement('button');
-                            //     buttonSave.textContent = 'Save changes';
-                            //     secondDivTable.append(buttonSave);
-                            // });
-
                             tr.appendChild(tdID);
                             tr.appendChild(tdImg);
                             tr.appendChild(tdName);
@@ -119,8 +201,11 @@ function MainPage(){
                             tr.appendChild(tdDelete);
                             divProduct.append(tr);
                         }
+                        // save changes
+                        var btnSaveIsOk = false;
                         var butonsUpdate = document.getElementsByClassName('buttonUpdate');
-                            console.log(butonsUpdate);
+                        var buttonSave = document.createElement('button');
+                        buttonSave.textContent = 'Save changes';
                             for(let i =0;i< butonsUpdate.length;i++)
                             {
                                 butonsUpdate[i].addEventListener('click',()=>{
@@ -133,6 +218,13 @@ function MainPage(){
                                             console.log('id:' + listClick[y].innerHTML);
                                             y+=1;
                                             flag = 1;
+                                           
+                                            if(btnSaveIsOk === false){
+                                               
+                                                var divSaveButton = document.getElementById('tableDiv');
+                                                divSaveButton.append(buttonSave);
+                                                btnSaveIsOk = true;
+                                            }
                                         }
                                         if(flag !== 0){
                                             if(flag < 9){
@@ -141,23 +233,65 @@ function MainPage(){
                                                 flag+=1;
                                                 if(flag === 9){
                                                     flag = 1;
+                                                    buttonSave.addEventListener('click',()=>{
+                                                        console.log(sessionStorage.getItem('token'));
+                                                        axios({
+                                                            method: 'post',
+                                                            url: `https://localhost:7031/api/ControllerClass/updateProduct`,
+                                                            dataType: "dataType",
+                                                            data:JSON.stringify({
+                                                                id:listClick[y-8].innerHTML,
+                                                                title: listClick[y-6].innerHTML,
+                                                                model: listClick[y-5].innerHTML,
+                                                                price: listClick[y-4].innerHTML,
+                                                                idCategory: listClick[y].innerHTML,
+                                                                uriPhoto: listClick[y-7].innerHTML,
+                                                                amount: listClick[y-3].innerHTML,
+                                                                status: listClick[y-1].innerHTML,
+                                                            }),
+                                                            headers: {
+                                                                'Accept': '*/*',
+                                                                'Content-Type': 'application/json',
+                                                                'Authorization': 'Bearer '+sessionStorage.getItem('token')
+                                                            }
+                                                        }).then(result => {
+                                                            console.log(result);
+                                                            buttonSave.remove(); 
+                                                        });
+
+                                                    });
                                                     return;
                                                 }
                                             }
                                         }
                                     }
-                                    for (const it of listClick) {
-                                       if(it.id === butonsUpdate[i].id){
-
-                                       }
-                                    }
                                 });
-                                // console.log(butonsUpdate[i].id);
-                                
                             }
                         
                     });
                 });
+                var td3 = document.createElement('td');
+                var imgDelCat = document.createElement('img');
+                imgDelCat.src = './delete-bg.png';
+                imgDelCat.width = 50;
+                imgDelCat.addEventListener('click',()=>{
+                    console.log(iterator['id']);
+                    axios({
+                        method: 'post',
+                        url: `https://localhost:7031/api/ControllerClass/deleteCategory?id=${iterator['id']}`,
+                        dataType: "dataType",
+                        headers: {
+                            'Accept': '*/*',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+sessionStorage.getItem('token')
+                        }
+                    }).then(deletePost => {
+                        console.log(deletePost);
+                        window.location.reload();
+                    });
+                });
+                td3.appendChild(imgDelCat);
+                tr.appendChild(td3);
                 bodyTable.append(tr);
             }
         });
@@ -165,16 +299,57 @@ function MainPage(){
 return(
     <div>
         <div className="MainDiv">
+        <button id="addCategoryBTN" onClick={()=>{
+                var divAddcategory = document.getElementsByClassName('MainDiv')[0];
+
+                var divAddCat = document.createElement('div');
+                divAddCat.id = 'AddProductDiv';
+                var h3AddCat = document.createElement('h3');
+                h3AddCat.textContent = 'Add category';
+                var inpAddCat = document.createElement('input');
+                inpAddCat.placeholder = 'Title category...';
+                inpAddCat.className = 'inpMargin';
+                var btnAddCat = document.createElement('button');
+                btnAddCat.textContent = 'Confirm';
+                btnAddCat.className = 'inpMargin';
+                btnAddCat.addEventListener('click',()=>{
+                    axios({
+                        method: 'post',
+                        url: 'https://localhost:7031/api/ControllerClass/addCategory',
+                        dataType: "dataType",
+                        data:{
+                            title: inpAddCat.value
+                        },
+                        headers: {
+                            'Accept': '*/*',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer '+sessionStorage.getItem('token')
+                        }
+                    }).then(addCat => {
+                        console.log(addCat);
+                    });
+                    divAddCat.remove();
+                    window.location.reload();
+                });
+
+                divAddCat.append(h3AddCat);
+                divAddCat.append(inpAddCat);
+                divAddCat.append(btnAddCat);
+                divAddcategory.append(divAddCat);
+            }}>Add Category</button>
             <table className="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Title</th>
+                        <th scope="col">Add</th>
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody id="tablebody">
                 </tbody>
             </table>
+            
         </div>
         <div id="tableDiv">
             <table className="table table-striped">
@@ -198,12 +373,6 @@ return(
                 </tbody>
             </table>
         </div>
-        {/* <input type="button" value='Go Back' onClick={()=>{
-            window.history.back();
-            return false;
-            // window.location.reload();
-            // return false;
-        }}/> */}
     </div>
 );
 }

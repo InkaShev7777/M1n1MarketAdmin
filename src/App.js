@@ -1,11 +1,16 @@
 import logo from './logo.svg';
+import { Route, Routes, useNavigate,BrowserRouter } from 'react-router-dom';
 import './App.css';
-
+import Main from './MainPage';
+import Authorization from './Authorization';
 function App() {
   return (
-    <div className="App">
-      
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Authorization/>}></Route>
+        <Route path='/mainpage' element={<Main/>}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

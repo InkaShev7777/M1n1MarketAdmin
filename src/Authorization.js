@@ -1,6 +1,7 @@
 import axios, { Axios } from 'axios';
 import './Authorization.css';
 function Authorization(){
+    // const navigate =  useNavigate();
     return(
         <div className='mainDiv'>
             <h1>Authorization</h1>
@@ -21,9 +22,14 @@ function Authorization(){
                     }
                 }).then(data => {
                     sessionStorage.setItem('token', data['data']['token']);
+                    window.location.assign('/mainpage');
+                }).catch(error => {
+                    alert(error.message);
                 });
             }}>Confirm</button>
+          
         </div>
     );
+        
 }
 export default Authorization;
