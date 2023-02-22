@@ -206,68 +206,55 @@ function MainPage(){
                         var butonsUpdate = document.getElementsByClassName('buttonUpdate');
                         var buttonSave = document.createElement('button');
                         buttonSave.textContent = 'Save changes';
-                            for(let i =0;i< butonsUpdate.length;i++)
-                            {
-                                butonsUpdate[i].addEventListener('click',()=>{
-                                    console.log(butonsUpdate[i].id);
-                                    var listClick = document.getElementsByClassName('iterClass');
-                                    console.log(listClick);
-                                    var flag = 0;
-                                    for(let y = 0;y<listClick.length;y++){
-                                        if(listClick[y].innerHTML ===  butonsUpdate[i].id){
-                                            console.log('id:' + listClick[y].innerHTML);
-                                            y+=1;
-                                            flag = 1;
-                                           
-                                            if(btnSaveIsOk === false){
-                                               
-                                                var divSaveButton = document.getElementById('tableDiv');
-                                                divSaveButton.append(buttonSave);
-                                                btnSaveIsOk = true;
-                                            }
-                                        }
-                                        if(flag !== 0){
-                                            if(flag < 9){
-                                                console.log('flag' + flag);
-                                                listClick[y].setAttribute('contentEditable','true');
-                                                flag+=1;
-                                                if(flag === 9){
-                                                    flag = 1;
-                                                    buttonSave.addEventListener('click',()=>{
-                                                        console.log(sessionStorage.getItem('token'));
-                                                        axios({
-                                                            method: 'post',
-                                                            url: `https://localhost:7031/api/ControllerClass/updateProduct`,
-                                                            dataType: "dataType",
-                                                            data:JSON.stringify({
-                                                                id:listClick[y-8].innerHTML,
-                                                                title: listClick[y-6].innerHTML,
-                                                                model: listClick[y-5].innerHTML,
-                                                                price: listClick[y-4].innerHTML,
-                                                                idCategory: listClick[y].innerHTML,
-                                                                uriPhoto: listClick[y-7].innerHTML,
-                                                                amount: listClick[y-3].innerHTML,
-                                                                status: listClick[y-1].innerHTML,
-                                                            }),
-                                                            headers: {
-                                                                'Accept': '*/*',
-                                                                'Content-Type': 'application/json',
-                                                                'Authorization': 'Bearer '+sessionStorage.getItem('token')
-                                                            }
-                                                        }).then(result => {
-                                                            console.log(result);
-                                                            buttonSave.remove(); 
-                                                        });
-
-                                                    });
-                                                    return;
-                                                }
-                                            }
-                                        }
+                        var listClick = document.getElementsByClassName('iterClass');
+                        for(let i = 0;i<butonsUpdate.length;i++){
+                           butonsUpdate[i].addEventListener('click',()=>{
+                            var countID = listClick.length/9;
+                            var idNow = 0;
+                            for(let x = 0;x<countID;x++){
+                                if(butonsUpdate[i].id === listClick[idNow].innerHTML){
+                                    console.log("Now: "+listClick[idNow].innerHTML);
+                                    for(let y = idNow+1;y<idNow+9;y++){
+                                        listClick[y].setAttribute('contentEditable','true');
                                     }
-                                });
+                                    if(btnSaveIsOk === false){
+
+                                        var divSaveButton = document.getElementById('tableDiv');
+                                        buttonSave.addEventListener('click',()=>{
+                                            axios({
+                                                method: 'post',
+                                                url: `https://localhost:7031/api/ControllerClass/updateProduct`,
+                                                dataType: "dataType",
+                                                data: JSON.stringify({
+                                                    id: listClick[idNow].innerHTML,
+                                                    title: listClick[idNow+2].innerHTML,
+                                                    model: listClick[idNow+3].innerHTML,
+                                                    price: listClick[idNow+4].innerHTML,
+                                                    idCategory: listClick[idNow+8].innerHTML,
+                                                    uriPhoto: listClick[idNow+1].innerHTML,
+                                                    amount: listClick[idNow+5].innerHTML,
+                                                    status: listClick[idNow+7].innerHTML,
+                                                }),
+                                                headers: {
+                                                    'Accept': '*/*',
+                                                    'Content-Type': 'application/json',
+                                                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                                                }
+                                            }).then(result => {
+                                                console.log(result);
+                                                buttonSave.remove();
+                                            });
+                                        });
+                                        divSaveButton.append(buttonSave);
+                                        btnSaveIsOk = true;
+
+                                    }
+                                    return;
+                                }
+                                idNow+=9;
                             }
-                        
+                        });
+                    }  
                     });
                 });
                 var td3 = document.createElement('td');

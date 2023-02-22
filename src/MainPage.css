@@ -41,6 +41,7 @@
     position: absolute;
     margin-top: 5px;
     margin-left: 90%;
+    width: 130px;
     border: none;
 }
 #addCategoryBTN:hover{
