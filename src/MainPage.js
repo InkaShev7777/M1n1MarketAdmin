@@ -8,7 +8,7 @@ function MainPage(){
         //  
         axios({
             method: 'get',
-            url: 'https://localhost:7031/api/ControllerClass/GetAllCategory',
+            url: 'https://marketuser.azurewebsites.net/api/ControllerClass/GetAllCategory',
             dataType: "dataType",
             headers: {
                 'Accept': '*/*',
@@ -72,7 +72,7 @@ function MainPage(){
                     buttonConfirmAddProduct.addEventListener('click',()=>{
                         axios({
                             method: 'post',
-                            url: `https://localhost:7031/api/ControllerClass/addProduct`,
+                            url: `https://marketuser.azurewebsites.net/api/ControllerClass/addProduct`,
                             dataType: "dataType",
                             data:JSON.stringify({
                                 id:0,
@@ -115,7 +115,7 @@ function MainPage(){
                     secondDivTable.setAttribute('class','');
                     axios({
                         method: 'get',
-                        url: `https://localhost:7031/api/ControllerClass/GetProductsByID?id=${iterator['id']}`,
+                        url: `https://marketuser.azurewebsites.net/api/ControllerClass/GetProductsByID?id=${iterator['id']}`,
                         dataType: "dataType",
                         headers: {
                             'Accept': '*/*',
@@ -167,7 +167,7 @@ function MainPage(){
                                
                                 axios({
                                     method: 'post',
-                                    url: `https://localhost:7031/api/ControllerClass/deleteProduct?id=${iter['id']}`,
+                                    url: `https://marketuser.azurewebsites.net/api/ControllerClass/deleteProduct?id=${iter['id']}`,
                                     dataType: "dataType",
                                     headers: {
                                         'Accept': '*/*',
@@ -223,7 +223,7 @@ function MainPage(){
                                         buttonSave.addEventListener('click',()=>{
                                             axios({
                                                 method: 'post',
-                                                url: `https://localhost:7031/api/ControllerClass/updateProduct`,
+                                                url: `https://marketuser.azurewebsites.net/api/ControllerClass/updateProduct`,
                                                 dataType: "dataType",
                                                 data: JSON.stringify({
                                                     id: listClick[idNow].innerHTML,
@@ -265,7 +265,7 @@ function MainPage(){
                     console.log(iterator['id']);
                     axios({
                         method: 'post',
-                        url: `https://localhost:7031/api/ControllerClass/deleteCategory?id=${iterator['id']}`,
+                        url: `https://marketuser.azurewebsites.net/api/ControllerClass/deleteCategory?id=${iterator['id']}`,
                         dataType: "dataType",
                         headers: {
                             'Accept': '*/*',
@@ -302,7 +302,7 @@ return(
                 btnAddCat.addEventListener('click',()=>{
                     axios({
                         method: 'post',
-                        url: 'https://localhost:7031/api/ControllerClass/addCategory',
+                        url: 'https://marketuser.azurewebsites.net/api/ControllerClass/addCategory',
                         dataType: "dataType",
                         data:{
                             title: inpAddCat.value
