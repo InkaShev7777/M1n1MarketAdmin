@@ -11,7 +11,7 @@ function App() {
         <Route path='/mainpage' element={<Main/>}></Route>
       </Routes>
     </BrowserRouter>
-    
   );
 }
+
 export default App;
