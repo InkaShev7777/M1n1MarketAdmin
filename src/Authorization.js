@@ -10,7 +10,7 @@ function Authorization(){
             <button onClick={() => {
                 axios({
                     method: 'post',
-                    url: 'https://localhost:7031/api/Authentication/Login',
+                    url: 'https:/marketadminreactapp.azurewebsites.net/api/Authentication/Login',
                     data: {
                         "userName": document.getElementById('login').value,
                         "password": document.getElementById('pass').value
