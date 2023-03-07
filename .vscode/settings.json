@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/51850d2f-48b6-468c-9497-b55d1f49ad8d/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/MarketAdminReact",
+    "appService.deploySubpath": "public"
+}
